@@ -9,11 +9,13 @@ import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.Log;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.charts.LineChart;
@@ -455,6 +457,8 @@ public class PieChartRenderer extends DataRenderer {
 
                 PieEntry entry = dataSet.getEntryForIndex(j);
 
+                //Log.d("Rabel", "EntryLabel = "+ entry.getLabel());
+
                 if (xIndex == 0)
                     angle = 0.f;
                 else
@@ -550,14 +554,16 @@ public class PieChartRenderer extends DataRenderer {
                     // draw everything, depending on settings
                     if (drawXOutside && drawYOutside) {
 
-                        drawValue(c,
+                       /* drawValue(c,
                                 formatter,
                                 value,
                                 entry,
                                 0,
                                 labelPtx,
                                 labelPty,
-                                dataSet.getValueTextColor(j));
+                                dataSet.getValueTextColor(j));*/
+
+                        drawValueForPieChart(c, formatter, value, entry, 0, labelPtx, labelPty, dataSet.getValueTextColor(j), entry.getLabel());
 
                         if (j < data.getEntryCount() && entry.getLabel() != null) {
                             drawEntryLabel(c, entry.getLabel(), labelPtx, labelPty + lineHeight);
@@ -569,8 +575,8 @@ public class PieChartRenderer extends DataRenderer {
                         }
                     } else if (drawYOutside) {
 
-                        drawValue(c, formatter, value, entry, 0, labelPtx, labelPty + lineHeight / 2.f, dataSet
-                                .getValueTextColor(j));
+                        //drawValue(c, formatter, value, entry, 0, labelPtx, labelPty + lineHeight / 2.f, dataSet.getValueTextColor(j));
+                        drawValueForPieChart(c, formatter, value, entry, 0, labelPtx, labelPty + lineHeight / 2.f, dataSet.getValueTextColor(j), entry.getLabel());
                     }
                 }
 
@@ -585,6 +591,7 @@ public class PieChartRenderer extends DataRenderer {
                     if (drawXInside && drawYInside) {
 
                         drawValue(c, formatter, value, entry, 0, x, y, dataSet.getValueTextColor(j));
+                        //drawValueForPieChart(c, formatter, value, entry, 0, x, y, dataSet.getValueTextColor(j), entry.getLabel());
 
                         if (j < data.getEntryCount() && entry.getLabel() != null) {
                             drawEntryLabel(c, entry.getLabel(), x, y + lineHeight);
@@ -597,6 +604,7 @@ public class PieChartRenderer extends DataRenderer {
                     } else if (drawYInside) {
 
                         drawValue(c, formatter, value, entry, 0, x, y + lineHeight / 2f, dataSet.getValueTextColor(j));
+                        //drawValueForPieChart(c, formatter, value, entry, 0, x, y + lineHeight / 2f, dataSet.getValueTextColor(j), entry.getLabel());
                     }
                 }
 

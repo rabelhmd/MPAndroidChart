@@ -6,7 +6,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.data.Entry;
@@ -46,7 +49,7 @@ public abstract class DataRenderer extends Renderer {
      * paint object for drawing values (text representing values of chart
      * entries)
      */
-    protected Paint mValuePaint;
+    public Paint mValuePaint;
 
     public DataRenderer(ChartAnimator animator, ViewPortHandler viewPortHandler) {
         super(viewPortHandler);
@@ -150,6 +153,31 @@ public abstract class DataRenderer extends Renderer {
     public void drawValue(Canvas c, IValueFormatter formatter, float value, Entry entry, int dataSetIndex, float x, float y, int color) {
         mValuePaint.setColor(color);
         c.drawText(formatter.getFormattedValue(value, entry, dataSetIndex, mViewPortHandler), x, y, mValuePaint);
+    }
+
+    public void drawValueForPieChart(Canvas c, IValueFormatter formatter, float value, Entry entry, int dataSetIndex, float x, float y, int color, String entryLabel) {
+
+        mValuePaint.setColor(color);
+        mValuePaint.setTextSize(Utils.convertDpToPixel(8.5f));
+
+
+        /* drawing labels */
+        mValuePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        c.drawText(entryLabel, x, y, mValuePaint);
+
+        /* drawingPercentage Values */
+        int textHeight = getTextHeight(entryLabel);
+        mValuePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        c.drawText(formatter.getFormattedValue(value, entry, dataSetIndex, mViewPortHandler), x, y + textHeight + (textHeight*0.4f), mValuePaint);
+
+        mValuePaint.setTextSize(Utils.convertDpToPixel(9f));
+    }
+
+    public int getTextHeight(String text)
+    {
+        Rect bounds = new Rect();
+        mValuePaint.getTextBounds(text, 0, text.length(), bounds);
+        return bounds.height();
     }
 
     /**
